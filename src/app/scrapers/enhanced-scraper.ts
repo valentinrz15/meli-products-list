@@ -13,7 +13,13 @@ import {
 
 export const scrapeML = async (): Promise<ScrapingResult> => {
   const startTime = Date.now();
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    executablePath:
+      process.env.NODE_ENV === "production"
+        ? "/tmp/playwright-chromium"
+        : undefined,
+  });
   const context = await browser.newContext();
   const page = await context.newPage();
   const allData: CategoryData[] = [];
