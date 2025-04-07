@@ -11,15 +11,36 @@ import {
   updateCache,
 } from "./utils";
 
+// Función para obtener la configuración del navegador según el entorno
+const getBrowserConfig = () => {
+  const isDev = process.env.NODE_ENV !== "production";
+
+  // Configuración base para todos los entornos
+  const config = {
+    headless: true,
+    args: [
+      "--disable-dev-shm-usage",
+      "--disable-setuid-sandbox",
+      "--no-sandbox",
+      "--disable-gpu",
+    ],
+  };
+
+  // Configuración específica para Vercel (producción)
+  if (!isDev) {
+    return {
+      ...config,
+      executablePath: "/tmp/playwright-chromium",
+    };
+  }
+
+  // En desarrollo, usar la configuración predeterminada
+  return config;
+};
+
 export const scrapeML = async (): Promise<ScrapingResult> => {
   const startTime = Date.now();
-  const browser = await chromium.launch({
-    headless: true,
-    executablePath:
-      process.env.NODE_ENV === "production"
-        ? "/tmp/playwright-chromium"
-        : undefined,
-  });
+  const browser = await chromium.launch(getBrowserConfig());
   const context = await browser.newContext();
   const page = await context.newPage();
   const allData: CategoryData[] = [];
@@ -299,7 +320,8 @@ export async function exploreAdditionalCategories(
 
   await new Promise((resolve) => setTimeout(resolve, 500));
 
-  const browser = await chromium.launch({ headless: true });
+  // Usar la misma configuración del navegador que en la función principal
+  const browser = await chromium.launch(getBrowserConfig());
   console.log("Navegador iniciado para exploración");
   const context = await browser.newContext();
 
@@ -351,7 +373,6 @@ export async function exploreAdditionalCategories(
       startId++;
 
       // Actualizar más frecuentemente el estado (cada 10 IDs)
-
       if (currentId % 10 === 0) {
         // Asegurarnos de incluir siempre un timestamp
         const progressUpdate: ScrapingResult = {

@@ -1,0 +1,6 @@
+{
+  "buildCommand": "npm run vercel-build",
+  "env": {
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/pw-browsers"
+  }
+}

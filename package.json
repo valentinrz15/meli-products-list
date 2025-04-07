@@ -4,20 +4,21 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "playwright install chromium && next build",
+    "build": "next build",
+    "vercel-build": "npx playwright install chromium && next build",
     "start": "next start -p 3001",
     "lint": "next lint"
   },
   "dependencies": {
     "@mui/icons-material": "^7.0.1",
     "@mui/material": "^7.0.1",
+    "@playwright/browser-chromium": "^1.51.1",
     "axios": "^1.8.4",
     "next": "15.2.4",
     "playwright": "^1.51.1",
-    "playwright-core": "^1.40.0",
+    "playwright-core": "^1.51.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-virtualized-auto-sizer": "^1.0.26",
     "react-window": "^1.8.11"
   },
   "devDependencies": {

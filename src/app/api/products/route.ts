@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const cachedData = await loadFromCache();
 
-    if (!cachedData) {
+    if (cachedData) {
       return NextResponse.json(cachedData);
     }
 
